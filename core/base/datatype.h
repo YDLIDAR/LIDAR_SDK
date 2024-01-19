@@ -137,6 +137,7 @@ typedef int32_t result_t;
 #define RESULT_OK      0
 #define RESULT_TIMEOUT -1
 #define RESULT_FAIL    -2
+#define RESULT_OTHER -3
 
 #define INVALID_TIMESTAMP (0)
 
@@ -144,5 +145,6 @@ typedef int32_t result_t;
 #define IS_OK(x)    ( (x) == RESULT_OK )
 #define IS_TIMEOUT(x)  ( (x) == RESULT_TIMEOUT )
 #define IS_FAIL(x)  ( (x) == RESULT_FAIL )
+#define IS_OTHER(x) ( (x) == RESULT_OTHER)
 
 #endif  // DATATYPE_H_

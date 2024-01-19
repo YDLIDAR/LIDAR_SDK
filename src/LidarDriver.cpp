@@ -287,11 +287,12 @@ result_t LidarDriver::waitScanData(node_info *nodebuffer, size_t &count, uint32_
     // }
 
     int len = receiveData((uint8_t*)&frame, sizeof(frame));
-    if(len < 0){
+    if(len <= 0){
         return RESULT_TIMEOUT;
-    }
-    else if(len < sizeof(frame)){
+    } else if(len < sizeof(frame)){
         return RESULT_FAIL;
+    } else if (strcmp(m_ip.c_str(), m_socket_data->GetClientAddr()) != 0) {
+        return RESULT_OTHER;
     }
 
     for(int i = 0; i < DATABLOCK_COUNT; i++) {
@@ -401,7 +402,9 @@ result_t LidarDriver::cacheScanData() {
                 }
             }
             continue;
-        }else{
+        } else if (IS_OTHER(ans)) {
+            continue;
+        } else{
             timeout_count = 0;
         }
 

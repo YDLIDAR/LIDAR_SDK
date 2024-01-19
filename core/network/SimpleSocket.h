@@ -661,7 +661,7 @@ class CSimpleSocket : public ChannelDevice {
   int32_t              m_nBytesSent;        /// number of bytes sent
   uint32_t             m_nFlags;            /// socket flags
   bool                 m_bIsBlocking;       /// is socket blocking
-  bool                 m_bIsMulticast;      /// is the UDP socket multicast;
+  bool                 m_bIsMulticast = false;      /// is the UDP socket multicast;
   struct timeval       m_stConnectTimeout;  /// connection timeout
   struct timeval       m_stRecvTimeout;     /// receive timeout
   struct timeval       m_stSendTimeout;     /// send timeout
