@@ -154,6 +154,11 @@ bool CLidar::setlidaropt(int optname, const void *optval, int optlen) {
         case LidarPropSampleRate:
             m_sampleRate = *(int *)(optval);
             break;
+
+        case LidarPropReversion:
+	    m_Reversion = *(bool *)(optval);
+            break;
+
         default:
             ret = false;
             break;
@@ -403,6 +408,9 @@ bool CLidar::doProcessSimple(LaserScan &outscan) {
         angle = static_cast<float>(m_global_nodes[i].angle_q6_checkbit / 100.0f);//单位：度
         
         LaserPoint point;
+        if (m_Reversion) {
+            angle = 360 - angle;
+        } 
         point.angle = angle;
         point.range = range;
         point.intensity = intensity;

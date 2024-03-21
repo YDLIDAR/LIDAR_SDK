@@ -26,6 +26,7 @@ class LIDAR_API CLidar {
         float m_field_of_view;            ///< LiDAR Field of View Angle.
         float m_ScanFrequency;            ///< LiDAR scanning frequency
         int m_sampleRate;                 ///< Lidar sample rate
+	bool m_Reversion = false;
         node_info *m_global_nodes;  
 
     public:
