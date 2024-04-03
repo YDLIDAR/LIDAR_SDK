@@ -34,6 +34,7 @@
 #include "core/common/lidar_def.h"
 #include "LidarDriver.h"
 #include <core/serial/serial.h>
+#include <unistd.h>
 
 /*-------------------------------------------------------------
                             CLidar
@@ -321,12 +322,12 @@ bool CLidar::turnOn() {
         LOGD("The radar is scanning.");
         return true;
     }
-
     if (isSupportScanFrequency(m_lidar_model, m_ScanFrequency)) {
         scan_frequency _scan_frequency;
         _scan_frequency.frequency = m_ScanFrequency;
         sampling_rate _sampling_rate;
-        _sampling_rate.rate =  m_sampleRate; 
+        _sampling_rate.rate =  m_sampleRate;
+        usleep(1000);
         m_lidarPtr->setScanFrequency(_scan_frequency);
         m_lidarPtr->setSamplingRate(_sampling_rate);
     }

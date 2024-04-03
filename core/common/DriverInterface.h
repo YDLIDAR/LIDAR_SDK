@@ -137,46 +137,6 @@ public:
     virtual result_t setScanFrequency(scan_frequency &frequency, uint32_t timeout = DEFAULT_TIMEOUT) = 0;
 
     /**
-     * @brief Increase the scanning frequency by 1.0 HZ \n
-     * @param[in] frequency    scanning frequency
-     * @param[in] timeout      timeout
-     * @return return status
-     * @retval RESULT_OK       success
-     * @retval RESULT_FAILE    failed
-     */
-    virtual result_t setScanFrequencyAdd(scan_frequency &frequency, uint32_t timeout = DEFAULT_TIMEOUT) = 0;
-
-    /**
-     * @brief Reduce the scanning frequency by 1.0 HZ \n
-     * @param[in] frequency    scanning frequency
-     * @param[in] timeout      timeout
-     * @return return status
-     * @retval RESULT_OK       success
-     * @retval RESULT_FAILE    failed
-     */
-    virtual result_t setScanFrequencyDis(scan_frequency &frequency, uint32_t timeout = DEFAULT_TIMEOUT) = 0;
-
-    /**
-     * @brief Increase the scanning frequency by 0.1 HZ \n
-     * @param[in] frequency    scanning frequency
-     * @param[in] timeout      timeout
-     * @return return status
-     * @retval RESULT_OK       success
-     * @retval RESULT_FAILE    failed
-     */
-    virtual result_t setScanFrequencyAddMic(scan_frequency &frequency, uint32_t timeout = DEFAULT_TIMEOUT) = 0;
-
-    /**
-     * @brief Reduce the scanning frequency by 0.1 HZ \n
-     * @param[in] frequency    scanning frequency
-     * @param[in] timeout      timeout
-     * @return return status
-     * @retval RESULT_OK       success
-     * @retval RESULT_FAILE    failed
-     */
-    virtual result_t setScanFrequencyDisMic(scan_frequency &frequency, uint32_t timeout = DEFAULT_TIMEOUT) = 0;
-
-    /**
      * @brief Get lidar sampling frequency \n
      * @param[in] frequency    sampling frequency
      * @param[in] timeout      timeout

@@ -98,7 +98,7 @@ bool LidarDriver::configPortTransfer(char *transBuf, int transLen, char *recvBuf
         len += m_socket_cmd->Send(reinterpret_cast<uint8_t *>(transBuf + len), transLen - len);
     }while(len < transLen);
     
-    LOGD("TCP SNED(%d):\n%s", len, transBuf);
+    LOGD("TCP SEND(%d):\n%s", len, transBuf);
     if (m_socket_cmd->Select(0, 800000)) {
         if(m_socket_cmd->Receive(recvMaxSize, reinterpret_cast<uint8_t *>(recvBuf)) > 0) {
             return true;
@@ -133,7 +133,7 @@ result_t LidarDriver::configMessage(char op, const char *descriptor, int &value,
         configPortDisconnect();
         return RESULT_FAIL;
     }
-    configPortDisconnect();
+    //configPortDisconnect();
 
     root = cJSON_Parse(recvbuf);
     if (!root){
@@ -145,7 +145,7 @@ result_t LidarDriver::configMessage(char op, const char *descriptor, int &value,
         return RESULT_FAIL;
     }
     value = item->valueint;
-    LOGD("TCP RECV(%d):\n%s,valid value = %d", strlen(recvbuf), recvbuf, item->valueint);
+    LOGD("TCP RECV(%d):\n%s", strlen(recvbuf), recvbuf);
     cJSON_Delete(root);
     return RESULT_OK;
 }
@@ -314,14 +314,16 @@ result_t LidarDriver::waitScanData(node_info *nodebuffer, size_t &count, uint32_
 
     //uint8_t curNum = (BigLittleSwap32(frame.factory) & 0x000F0000) >> 16;
     uint8_t curNum = (BigLittleSwap32(frame.factory) & 0x0F000000) >> 24;
-
+    static bool isFirst = true;
     if((curNum - lastNum != 1) && (curNum - lastNum != -15)) {
-        LOGE("data packet dropout, curNum = %d, lastNum = %d", curNum, lastNum);
+	if (!isFirst) {
+            LOGE("data packet dropout, curNum = %d, lastNum = %d", curNum, lastNum);
+	}
+	isFirst = false;
         lastNum = curNum;
         return RESULT_FAIL;
     }
     lastNum = curNum;
-    
     for(int i = 0; i < DATABLOCK_COUNT; i++) {
         uint16_t startAngle = BigLittleSwap16(frame.dataBlock[i].startAngle);
         uint16_t addAngle = 0;
@@ -366,7 +368,7 @@ result_t LidarDriver::waitScanData(node_info *nodebuffer, size_t &count, uint32_
 
 
 result_t LidarDriver::cacheScanData() {
-    LOGD("Thread Start:  [%s]", __func__);
+    //LOGD("Thread Start:  [%s]", __func__);
     node_info      local_buf[DATABLOCK_COUNT * DATA_COUNT];
     node_info      local_scan[MAX_SCAN_NODES];
     size_t         timeout_count = 0;
@@ -631,43 +633,6 @@ result_t LidarDriver::setScanFrequency(scan_frequency &frequency, uint32_t timeo
     }
     return RESULT_OK;
 }
-
-
-result_t LidarDriver::setScanFrequencyAdd(scan_frequency &frequency, uint32_t timeout) {
-    if(!IS_OK(getScanFrequency(frequency))) {
-        return RESULT_FAIL;
-    }
-    frequency.frequency += 100;
-    return setScanFrequency(frequency);
-}
-
-
-result_t LidarDriver::setScanFrequencyDis(scan_frequency &frequency, uint32_t timeout) {
-    if(!IS_OK(getScanFrequency(frequency))) {
-        return RESULT_FAIL;
-    }
-    frequency.frequency -= 100;
-    return setScanFrequency(frequency);
-}
-
-
-result_t LidarDriver::setScanFrequencyAddMic(scan_frequency &frequency, uint32_t timeout) {
-    if(!IS_OK(getScanFrequency(frequency))) {
-        return RESULT_FAIL;
-    }
-    frequency.frequency += 10;
-    return setScanFrequency(frequency);
-}
-
-
-result_t LidarDriver::setScanFrequencyDisMic(scan_frequency &frequency, uint32_t timeout) {
-    if(!IS_OK(getScanFrequency(frequency))) {
-        return RESULT_FAIL;
-    }
-    frequency.frequency -= 10;
-    return setScanFrequency(frequency);
-}
-
 
 result_t LidarDriver::getSamplingRate(sampling_rate &rate, uint32_t timeout) {
     if(!IS_OK(configMessage('r', valName(m_lidarConfig.samplerate), m_lidarConfig.samplerate))) {
