@@ -53,7 +53,8 @@ struct DataBlock {
 
 struct DataFrame {
     DataBlock dataBlock[DATABLOCK_COUNT];
-    uint32_t timeStamp;
+    uint32_t timeStamp_s;
+    uint32_t timeStamp_ms;
     uint32_t factory;
 }__attribute__((packed));
 

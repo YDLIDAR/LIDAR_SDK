@@ -345,22 +345,16 @@ result_t LidarDriver::waitScanData(node_info *nodebuffer, size_t &count, uint32_
         }
     }
 
-    static uint64_t TimeStampCount = 0;
-    static uint64_t TimeStamp = 0;
     static uint64_t lastTimeStamp = 0;
-    static uint32_t TimeStampTmp = 0;
-    static uint32_t lastTimeStampTmp = 0;
+    static uint64_t TimeStampTmp = 0;
 
-    TimeStampTmp = BigLittleSwap32(frame.timeStamp);
-    TimeStampCount = TimeStampTmp > lastTimeStampTmp ? TimeStampCount : TimeStampCount + 1;//当前时间戳比上一轮时间戳小，说明时间戳溢出重新计数
-    TimeStamp = 0xffffffff * TimeStampCount + TimeStampTmp;
-    lastTimeStampTmp = TimeStampTmp;
+    TimeStampTmp = BigLittleSwap32(frame.timeStamp_s) * 1000 + BigLittleSwap32(frame.timeStamp_ms); //ms
 
     for (int i = 0; i < count; i++) {
         n = nodebuffer + i;
-        n->stamp = TimeStamp - (TimeStamp - lastTimeStamp) * (count - i - 1) / count;
+        n->stamp = TimeStampTmp - (TimeStampTmp - lastTimeStamp) * (count - i - 1) / count;  //ms
     }
-    lastTimeStamp = TimeStamp;
+    lastTimeStamp = TimeStampTmp;
 
     return RESULT_OK;
 }

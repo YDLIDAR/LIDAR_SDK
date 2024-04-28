@@ -378,14 +378,8 @@ bool CLidar::turnOff() {
 -------------------------------------------------------------*/
 bool CLidar::doProcessSimple(LaserScan &outscan) {
     size_t count = DriverInterface::MAX_SCAN_NODES;
-    // wait Scan data:
-    uint64_t tim_scan_start = getTime();
-    uint64_t startTs = tim_scan_start;
     //从缓存中获取已采集的一圈扫描数据
     result_t op_result = m_lidarPtr->grabScanData(m_global_nodes, count);
-    uint64_t tim_scan_end = getTime();
-    uint64_t endTs = tim_scan_end;
-    uint64_t sys_scan_time = tim_scan_end - tim_scan_start; //获取一圈数据所花费的时间
     outscan.points.clear();
 
     // Fill in scan data:
@@ -395,16 +389,12 @@ bool CLidar::doProcessSimple(LaserScan &outscan) {
 
     outscan.config.min_angle = math::from_degrees(m_MinAngle);
     outscan.config.max_angle = math::from_degrees(m_MaxAngle);
-    outscan.config.scan_time = static_cast<float>((m_global_nodes[count - 1].stamp - m_global_nodes[0].stamp)) / 1e7;//单位：s
+    outscan.config.scan_time = (m_global_nodes[count - 1].stamp - m_global_nodes[0].stamp) * 0.001;//单位：s
     outscan.config.angle_increment = math::from_degrees(m_field_of_view) / count;
     outscan.config.time_increment = outscan.config.scan_time / count;
     outscan.config.min_range = m_MinRange;
     outscan.config.max_range = m_MaxRange;
 
-    //模组编号
-    //outscan.moduleNum = m_global_nodes[0].index;
-    //环境标记
-    //outscan.envFlag = m_global_nodes[0].is + (uint16_t(m_global_nodes[1].is) << 8);//环境标记（目前只针对GS2）
     //将一圈中第一个点采集时间作为该圈数据采集时间
     outscan.stamp = (m_global_nodes[0].stamp > 0) ? m_global_nodes[0].stamp : 0;
 
