@@ -5,7 +5,6 @@
 #include <core/base/thread.h>
 #include <core/common/lidar_help.h>
 
-
 namespace lidar {
 
 LidarDriver::LidarDriver() {
@@ -98,7 +97,7 @@ bool LidarDriver::configPortTransfer(char *transBuf, int transLen, char *recvBuf
         len += m_socket_cmd->Send(reinterpret_cast<uint8_t *>(transBuf + len), transLen - len);
     }while(len < transLen);
     
-    LOGD("TCP SEND(%d):\n%s", len, transBuf);
+    //LOGD("TCP SEND(%d):\n%s", len, transBuf);
     if (m_socket_cmd->Select(0, 800000)) {
         if(m_socket_cmd->Receive(recvMaxSize, reinterpret_cast<uint8_t *>(recvBuf)) > 0) {
             return true;
@@ -145,7 +144,7 @@ result_t LidarDriver::configMessage(char op, const char *descriptor, int &value,
         return RESULT_FAIL;
     }
     value = item->valueint;
-    LOGD("TCP RECV(%d):\n%s", strlen(recvbuf), recvbuf);
+    //LOGD("TCP RECV(%d):\n%s", strlen(recvbuf), recvbuf);
     cJSON_Delete(root);
     return RESULT_OK;
 }
@@ -297,7 +296,7 @@ result_t LidarDriver::waitScanData(node_info *nodebuffer, size_t &count, uint32_
 
     for(int i = 0; i < DATABLOCK_COUNT; i++) {
         if (BigLittleSwap16(frame.dataBlock[i].frameHead) != 0xFFEE) {
-            LOGE("data error, frameHead[%d] != 0xFFEE", i);
+            //LOGE("data error, frameHead[%d] != 0xFFEE", i);
             return RESULT_FAIL;
         }
     }
@@ -317,7 +316,7 @@ result_t LidarDriver::waitScanData(node_info *nodebuffer, size_t &count, uint32_
     static bool isFirst = true;
     if((curNum - lastNum != 1) && (curNum - lastNum != -15)) {
 	if (!isFirst) {
-            LOGE("data packet dropout, curNum = %d, lastNum = %d", curNum, lastNum);
+            //LOGE("data packet dropout, curNum = %d, lastNum = %d", curNum, lastNum);
 	}
 	isFirst = false;
         lastNum = curNum;
@@ -391,7 +390,7 @@ result_t LidarDriver::cacheScanData() {
             continue;
         }else if(IS_TIMEOUT(ans)){
             timeout_count++;
-            LOGE("get data timeout(%d)!!!", timeout_count);
+            //LOGE("get data timeout(%d)!!!", timeout_count);
             if(timeout_count > DEFAULT_TIMEOUT_COUNT){
                 setDriverError(TimeoutError);
                 if(IS_OK(checkAutoConnecting())) {
@@ -441,7 +440,7 @@ result_t LidarDriver::createThread() {
 
 
 result_t LidarDriver::GetListInfo() {
-    LOGD("Thread Start:  [%s]", __func__);
+    //LOGD("Thread Start:  [%s]", __func__);
     char name[64] = {0};
     char buf[256] = {0};
     int i;
@@ -486,8 +485,8 @@ result_t LidarDriver::GetListInfo() {
             }
             if(i >= m_lidarList.size()) {
                 m_lidarList.push_back(lst);
-                LOGD("Find a new device, ip: %s, model: %s, hardware: %s, software: %s ", 
-                      lst.ip.c_str(), lst.model.c_str(), lst.hardware.c_str(), lst.software.c_str());
+                //LOGD("Find a new device, ip: %s, model: %s, hardware: %s, software: %s ", 
+                      //lst.ip.c_str(), lst.model.c_str(), lst.hardware.c_str(), lst.software.c_str());
             }
             cJSON_Delete(root);
         }
@@ -562,7 +561,7 @@ result_t LidarDriver::grabScanData(node_info *nodebuffer, size_t &count, uint32_
             }
 
             ScopedLocker l(m_Lock);
-            size_t size_to_copy = std::min(count, m_ScanNodeCount);
+            size_t size_to_copy = min(count, m_ScanNodeCount);
             memcpy(nodebuffer, m_ScanNodeBuf, size_to_copy * sizeof(node_info));
             count = size_to_copy;
             m_ScanNodeCount = 0;

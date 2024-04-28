@@ -34,7 +34,11 @@
 #include "core/common/lidar_def.h"
 #include "LidarDriver.h"
 #include <core/serial/serial.h>
+#ifdef _WIN32
+#include <synchapi.h>
+#else
 #include <unistd.h>
+#endif
 
 /*-------------------------------------------------------------
                             CLidar
@@ -272,7 +276,7 @@ bool CLidar::initialize() {
     //     LOGE("[CLidar::initialize] Error initializing LIDAR check status under [%s] and [%d].",m_SerialPort.c_str(), m_SerialBaudrate);
     //     return false;
     // }
-    LOGD("LiDAR init success, Elapsed time== %u ms", getms() - t);
+    //LOGD("LiDAR init success, Elapsed time== %u ms", getms() - t);
     return true;
 }
 
@@ -284,7 +288,7 @@ bool CLidar::checkCOMMs() {
         if (isLidar(m_LidarType)) {
             m_lidarPtr = new lidar::LidarDriver();
         } else {
-            LOGW("An unsupported model:%d", m_LidarType);
+            //LOGW("An unsupported model:%d", m_LidarType);
         }
 
         if (!m_lidarPtr) {
@@ -292,7 +296,7 @@ bool CLidar::checkCOMMs() {
             return false;
         }
        
-        LOGD("SDK Version: %s", m_lidarPtr->getSDKVersion().c_str());
+        //LOGD("SDK Version: %s", m_lidarPtr->getSDKVersion().c_str());
     } else {
         LOGD("Lidar SDK has been initialized");
     }
@@ -303,7 +307,7 @@ bool CLidar::checkCOMMs() {
     //make connection...
     result_t op_result = m_lidarPtr->connect(m_SerialPort.c_str(), m_SerialBaudrate);
     if (!IS_OK(op_result)) {
-        LOGE("[CLidar] Error, cannot bind to the specified IP Address[%s]", m_SerialPort.c_str());     
+        //LOGE("[CLidar] Error, cannot bind to the specified IP Address[%s]", m_SerialPort.c_str());     
         return false;
     }
     LOGD("LiDAR successfully connected");
@@ -327,14 +331,18 @@ bool CLidar::turnOn() {
         _scan_frequency.frequency = m_ScanFrequency;
         sampling_rate _sampling_rate;
         _sampling_rate.rate =  m_sampleRate;
+		#ifdef _WIN32
+		Sleep(1000);
+		#else
         usleep(1000);
+		#endif
         m_lidarPtr->setScanFrequency(_scan_frequency);
         m_lidarPtr->setSamplingRate(_sampling_rate);
     }
 
     result_t op_result = m_lidarPtr->startScan();
     if (!IS_OK(op_result)) {
-        LOGE("[CLidar] Failed to start scan mode: %x", op_result);
+        //LOGE("[CLidar] Failed to start scan mode: %x", op_result);
         return false;
     }
     m_field_of_view = m_MaxAngle - m_MinAngle;
@@ -358,7 +366,7 @@ bool CLidar::turnOff() {
 
     result_t op_result = m_lidarPtr->stopScan();
     if (!IS_OK(op_result)) {
-        LOGE("[CLidar] Failed to stop scan mode: %x", op_result);
+        //LOGE("[CLidar] Failed to stop scan mode: %x", op_result);
         return false;
     }
     LOGD("The radar has stopped scanning.");
