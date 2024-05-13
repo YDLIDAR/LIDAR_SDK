@@ -56,13 +56,13 @@ extern "C" {
  * @note call ::lidarDestroy destroy
  * @return created instance
  */
-LIDAR_API Lidar *lidarCreate(void);
+LIDAR_API PubLidar *lidarCreate(void);
 
 /**
  * @brief Destroy Lidar instance by ::lidarCreate create
  * @param lidar     CLidar instance
  */
-LIDAR_API void lidarDestroy(Lidar **lidar);
+LIDAR_API void lidarDestroy(PubLidar **lidar);
 
 /**
  * @brief set lidar properties
@@ -123,7 +123,7 @@ LIDAR_API void lidarDestroy(Lidar **lidar);
  * @return true if the Property is set successfully, otherwise false.
  * @see LidarProperty
  */
-LIDAR_API bool setlidaropt(Lidar *lidar, int optname, const void *optval,
+LIDAR_API bool setlidaropt(PubLidar *lidar, int optname, const void *optval,
                              int optlen);
 
 /**
@@ -185,7 +185,7 @@ LIDAR_API bool setlidaropt(Lidar *lidar, int optname, const void *optval,
  * @return true if the Property is get successfully, otherwise false.
  * @see LidarProperty
  */
-LIDAR_API bool getlidaropt(Lidar *lidar, int optname, void *optval,
+LIDAR_API bool getlidaropt(PubLidar *lidar, int optname, void *optval,
                              int optlen);
 
 /**
@@ -198,13 +198,13 @@ LIDAR_API void GetSdkVersion(char *version);
  * Initialize the SDK.
  * @return true if successfully initialized, otherwise false.
  */
-LIDAR_API bool initialize(Lidar *lidar);
+LIDAR_API bool initialize(PubLidar *lidar);
 
 /**
  * Start the device scanning routine which runs on a separate thread.
  * @return true if successfully started, otherwise false.
  */
-LIDAR_API bool turnOn(Lidar *lidar);
+LIDAR_API bool turnOn(PubLidar *lidar);
 
 /**
  * @brief Get the LiDAR Scan Data. turnOn is successful before doProcessSimple scan data.
@@ -212,23 +212,23 @@ LIDAR_API bool turnOn(Lidar *lidar);
  * @param[out] outscan       LiDAR Scan Data
  * @return true if successfully started, otherwise false.
  */
-LIDAR_API bool doProcessSimple(Lidar *lidar, LaserFan *outscan);
+LIDAR_API bool doProcessSimple(PubLidar *lidar, LaserFan *outscan);
 /**
  * @brief Stop the device scanning thread and disable motor.
  * @return true if successfully Stoped, otherwise false.
  */
-LIDAR_API bool turnOff(Lidar *lidar);
+LIDAR_API bool turnOff(PubLidar *lidar);
 /**
  * @brief Uninitialize the SDK and Disconnect the LiDAR.
  */
-LIDAR_API void disconnecting(Lidar *lidar);
+LIDAR_API void disconnecting(PubLidar *lidar);
 
 /**
  * @brief Get the last error information of a (socket or serial)
  * @return a human-readable description of the given error information
  * or the last error information of a (socket or serial)
  */
-LIDAR_API const char *DescribeError(Lidar *lidar);
+LIDAR_API const char *DescribeError(PubLidar *lidar);
 
 /**
  * @brief initialize system signals
@@ -249,7 +249,7 @@ LIDAR_API void os_shutdown();
  * @param ports serial port lists
  * @return valid port number
  */
-LIDAR_API int lidarPortList(Lidar *lidar, LidarPort *ports);
+LIDAR_API int lidarPortList(PubLidar *lidar, LidarPort *ports);
 
 #ifdef __cplusplus
 }

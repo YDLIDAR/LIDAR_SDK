@@ -80,7 +80,7 @@ typedef enum {
 /// lidar instance
 typedef struct {
     void *lidar;///< CLidar instance
-} Lidar;
+} PubLidar;
 
 typedef enum  {
     NoError = 0,

@@ -27,13 +27,13 @@
 #include "CLidar.h"
 #include "lidar_config.h"
 
-Lidar *lidarCreate() {
-    Lidar *instance = new Lidar;
+PubLidar *lidarCreate() {
+    PubLidar *instance = new PubLidar;
     instance->lidar = (void *)new CLidar();
     return instance;
 }
 
-void lidarDestroy(Lidar **lidar) {
+void lidarDestroy(PubLidar **lidar) {
     if (lidar == NULL || *lidar == NULL) {
         return;
     }
@@ -51,7 +51,7 @@ void lidarDestroy(Lidar **lidar) {
     return;
 }
 
-bool setlidaropt(Lidar *lidar, int optname, const void *optval, int optlen) {
+bool setlidaropt(PubLidar *lidar, int optname, const void *optval, int optlen) {
     if (lidar == NULL || lidar->lidar == NULL || optval == NULL) {
         return false;
     }
@@ -65,7 +65,7 @@ bool setlidaropt(Lidar *lidar, int optname, const void *optval, int optlen) {
     return false;
 }
 
-bool getlidaropt(Lidar *lidar, int optname, void *optval, int optlen) {
+bool getlidaropt(PubLidar *lidar, int optname, void *optval, int optlen) {
     if (lidar == NULL || lidar->lidar == NULL || optval == NULL) {
         return false;
     }
@@ -84,7 +84,7 @@ void GetSdkVersion(char *version) {
     strcpy(version, LIDAR_SDK_VERSION_STR);
 }
 
-bool initialize(Lidar *lidar) {
+bool initialize(PubLidar *lidar) {
     if (lidar == NULL || lidar->lidar == NULL) {
         return false;
     }
@@ -99,7 +99,7 @@ bool initialize(Lidar *lidar) {
 }
 
 
-bool turnOn(Lidar *lidar) {
+bool turnOn(PubLidar *lidar) {
     if (lidar == NULL || lidar->lidar == NULL) {
         return false;
     }
@@ -113,7 +113,7 @@ bool turnOn(Lidar *lidar) {
     return false;
 }
 
-bool doProcessSimple(Lidar *lidar, LaserFan *outscan) {
+bool doProcessSimple(PubLidar *lidar, LaserFan *outscan) {
     if (lidar == NULL || lidar->lidar == NULL || outscan == NULL) {
         return false;
     }
@@ -137,7 +137,7 @@ bool doProcessSimple(Lidar *lidar, LaserFan *outscan) {
     return false;
 }
 
-bool turnOff(Lidar *lidar) {
+bool turnOff(PubLidar *lidar) {
     if (lidar == NULL || lidar->lidar == NULL) {
         return false;
     }
@@ -151,7 +151,7 @@ bool turnOff(Lidar *lidar) {
     return false;
 }
 
-void disconnecting(Lidar *lidar) {
+void disconnecting(PubLidar *lidar) {
     if (lidar == NULL || lidar->lidar == NULL) {
         return;
     }
@@ -163,7 +163,7 @@ void disconnecting(Lidar *lidar) {
     }
 }
 
-const char *DescribeError(Lidar *lidar) {
+const char *DescribeError(PubLidar *lidar) {
     char const *value = "";
 
     if (lidar == NULL || lidar->lidar == NULL) {
@@ -191,7 +191,7 @@ void os_shutdown() {
     lidar::os_shutdown();
 }
 
-int lidarPortList(Lidar *lidar, LidarPort *ports) {
+int lidarPortList(PubLidar *lidar, LidarPort *ports) {
     if (lidar == NULL || ports == NULL) {
         return 0;
     }

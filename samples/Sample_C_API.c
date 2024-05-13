@@ -47,7 +47,7 @@ int main(int argc, char *argv[]) {
         return 0;
     }
 
-    Lidar *lidar = lidarCreate();
+    PubLidar *lidar = lidarCreate();
 
     //////////////////////string property/////////////////  
 
