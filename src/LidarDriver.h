@@ -131,7 +131,7 @@ private:
      * @retval true  success
      * @retval fase  failed
      */
-    bool listPortConnect(const char *lidarIP, int localPort = 8001);
+    bool listPortConnect(const char *lidarIP, int localPort = 7777);
 
     /**
      * @brief UDP disconnect(8001).

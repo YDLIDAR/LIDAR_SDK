@@ -11,7 +11,7 @@ LidarDriver::LidarDriver() {
     m_ip = "192.168.0.11";
     m_cmd_port = 8090;
     m_data_port = 8000;
-    m_list_port = 8001;
+    m_list_port = 7777;
     m_socket_cmd = new CActiveSocket(CSimpleSocket::SocketTypeTcp);
     m_socket_cmd->SetConnectTimeout(DEFAULT_CONNECTION_TIMEOUT_SEC, DEFAULT_CONNECTION_TIMEOUT_USEC);
     m_socket_data = new CPassiveSocket(CSimpleSocket::SocketTypeUdp);
@@ -234,7 +234,7 @@ bool LidarDriver::listPortDisconnect() {
     if (!m_socket_list) {
         return false;
     }
-    m_ListThread.join();
+    //m_ListThread.join();
     return m_socket_list->Close();
 }
 
