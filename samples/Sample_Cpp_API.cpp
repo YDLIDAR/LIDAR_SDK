@@ -97,10 +97,9 @@ int main(int argc, char *argv[]) {
 
     while (ret && lidar::os_isOk()) {
         if (lidar.doProcessSimple(scan)) {//获取一圈点云数据
-            fprintf(stdout, "Scan received[%lu]: %u pionts, scanning frequency is [%f]Hz.\n",
+            fprintf(stdout, "Scan received[%llu]: %u pionts.\n",
                     scan.stamp,
-                    (unsigned int)scan.points.size(), 
-                    1.0 / scan.config.scan_time);
+                    (unsigned int)scan.points.size());
             fflush(stdout);
         } else {
             fprintf(stderr, "Failed to get Lidar Data\n");

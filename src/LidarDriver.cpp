@@ -234,7 +234,7 @@ bool LidarDriver::listPortDisconnect() {
     if (!m_socket_list) {
         return false;
     }
-    //m_ListThread.join();
+    m_ListThread.join();
     return m_socket_list->Close();
 }
 
@@ -520,10 +520,10 @@ result_t LidarDriver::connect(const char *port_path, uint32_t baudrate) {
         return RESULT_FAIL;
     }
 
-    if (!listPortConnect(NULL, m_list_port)) {
-        setDriverError(NotOpenError);
-        return RESULT_FAIL;
-    }
+    // if (!listPortConnect(NULL, m_list_port)) {
+    //     setDriverError(NotOpenError);
+    //     return RESULT_FAIL;
+    // }
 
     setIsConnected(true);
 
@@ -535,7 +535,7 @@ result_t LidarDriver::connect(const char *port_path, uint32_t baudrate) {
 void LidarDriver::disconnect() {
     configPortDisconnect();
     dataPortDisconnect();
-    listPortDisconnect();
+    // listPortDisconnect();
     setIsConnected(false);
     LOGD("Network disconnection!");
 }
