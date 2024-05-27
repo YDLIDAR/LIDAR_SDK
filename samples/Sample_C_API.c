@@ -15,13 +15,6 @@
 
 
 int main(int argc, char *argv[]) {
-    printf("__   ______  _     ___ ____    _    ____  \n");
-    printf("\\ \\ / /  _ \\| |   |_ _|  _ \\  / \\  |  _ \\ \n");
-    printf(" \\ V /| | | | |    | || | | |/ _ \\ | |_) | \n");
-    printf("  | | | |_| | |___ | || |_| / ___ \\|  _ <  \n");
-    printf("  |_| |____/|_____|___|____/_/   \\_\\_| \\_\\ \n");
-    printf("\n");
-    fflush(stdout);
     char port[20];
     os_init();
 
